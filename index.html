@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LUCKY CAT - sound identity</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  html,body{margin:0;min-height:100%;background:#12100c;font-family:"Space Grotesk",sans-serif;color:#f0e8d8;display:flex;justify-content:center;padding:24px 14px 50px;box-sizing:border-box}
+  #app{width:760px;max-width:100%}
+  h1{font-size:16px;letter-spacing:.22em;margin:0}
+  h1 span{color:#ffd24a}
+  .sub{color:#9a8a6a;font-size:11px;letter-spacing:.05em;margin:5px 0 16px;line-height:1.7}
+  .card{background:#1a1712;border:1px solid #2e2820;border-radius:10px;padding:16px;margin-bottom:14px}
+  .card b{font-size:11px;letter-spacing:.15em;color:#c8b088}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;margin-top:12px}
+  .snd{background:#12100c;border:1px solid #2e2820;border-radius:8px;padding:12px;cursor:pointer;text-align:left;color:#f0e8d8;font-family:inherit}
+  .snd:hover{border-color:#ffd24a}
+  .snd.playing{border-color:#ffd24a;box-shadow:0 0 12px #ffd24a33}
+  .snd .n{font-size:11px;font-weight:700;letter-spacing:.08em}
+  .snd .d{font-size:10px;color:#9a8a6a;margin-top:4px;line-height:1.5}
+  .note{font-size:10px;color:#6a5f4a;margin-top:10px;line-height:1.7}
+</style>
+</head>
+<body>
+<div id="app">
+  <h1>LUCKY CAT <span>SOUND IDENTITY</span></h1>
+  <div class="sub">One palette across the whole product line: bell-collar timbre, A major pentatonic, warm gold. All procedural synthesis - no samples, no licenses, royalty-free forever.</div>
+  <div class="card"><b>BRAND</b><div class="grid" id="brand"></div></div>
+  <div class="card"><b>NOTIFICATIONS</b><div class="grid" id="notif"></div></div>
+  <div class="card"><b>UI</b><div class="grid" id="ui"></div></div>
+  <div class="card"><b>TAMAGOTCHI PET</b><div class="grid" id="pet"></div></div>
+  <div class="note">Files: 44.1 kHz stereo OGG Vorbis q6. Musical pieces loudness-normalized to -16 LUFS (TP &lt; -1.5 dBTP); short UI blips peak-normalized. Source: gen_lucky.py (numpy), renders WAV, ffmpeg encodes OGG.</div>
+</div>
+<script>
+const SOUNDS=[
+  ['brand','audio_logo','Audio logo - A-C#-E bell motif over warm pluck, shimmer tail'],
+  ['brand','startup_chime','App start - soft rising fourth + air swell'],
+  ['notif','notify_message','Message - two soft mallet notes'],
+  ['notif','notify_task_done','Task complete - ascending triad + coin sparkle'],
+  ['notif','notify_alert','Alert - two gentle low bell taps, no harshness'],
+  ['ui','ui_tap','Tap - short tick'],
+  ['ui','ui_toggle','Toggle - two-tone click'],
+  ['ui','ui_success','Success - bell + fifth'],
+  ['ui','ui_error','Error - soft low droop, never buzzy'],
+  ['pet','pet_eat','Eating - munching bursts'],
+  ['pet','pet_play','Play - bouncy arpeggio'],
+  ['pet','pet_sleep','Sleep - descending lullaby + breath'],
+  ['pet','pet_happy','Happy - purr + rising chirp'],
+  ['pet','pet_sad','Sad - descending minor third, soft vibrato'],
+  ['pet','pet_evolve','Evolve - sparkle gliss into A major bell chord'],
+];
+let cur=null;
+for(const [grp,name,desc] of SOUNDS){
+  const b=document.createElement('button');b.className='snd';
+  b.innerHTML='<div class="n">'+name.replace(/_/g,' ').toUpperCase()+'</div><div class="d">'+desc+'</div>';
+  b.onclick=()=>{
+    if(cur){cur.pause();cur=null;document.querySelectorAll('.snd').forEach(x=>x.classList.remove('playing'));}
+    const a=new Audio('ogg/'+name+'.ogg');cur=a;
+    b.classList.add('playing');
+    a.onended=()=>b.classList.remove('playing');
+    a.play();
+  };
+  document.getElementById(grp).appendChild(b);
+}
+</script>
+</body>
+</html>

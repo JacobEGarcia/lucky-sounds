@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LUCKY CAT - ambient loops</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  html,body{margin:0;min-height:100%;background:#12100c;font-family:"Space Grotesk",sans-serif;color:#f0e8d8;display:flex;justify-content:center;padding:24px 14px 50px;box-sizing:border-box}
+  #app{width:760px;max-width:100%}
+  h1{font-size:16px;letter-spacing:.22em;margin:0}
+  h1 span{color:#ffd24a}
+  .sub{color:#9a8a6a;font-size:11px;letter-spacing:.05em;margin:5px 0 16px;line-height:1.7}
+  .card{background:#1a1712;border:1px solid #2e2820;border-radius:10px;padding:16px;margin-bottom:14px}
+  .card b{font-size:11px;letter-spacing:.15em;color:#c8b088}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;margin-top:12px}
+  .snd{background:#12100c;border:1px solid #2e2820;border-radius:8px;padding:12px;cursor:pointer;text-align:left;color:#f0e8d8;font-family:inherit}
+  .snd:hover{border-color:#ffd24a}
+  .snd.playing{border-color:#ffd24a;box-shadow:0 0 12px #ffd24a33}
+  .snd .n{font-size:11px;font-weight:700;letter-spacing:.08em}
+  .snd .d{font-size:10px;color:#9a8a6a;margin-top:4px;line-height:1.5}
+  .note{font-size:10px;color:#6a5f4a;margin-top:10px;line-height:1.7}
+</style>
+</head>
+<body>
+<div id="app">
+  <h1>LUCKY CAT <span>AMBIENT LOOPS</span></h1>
+  <div class="sub">Seamless loops for the Tamagotchi room and site backgrounds. Same pentatonic palette as the sound identity pack. All procedural, royalty-free.</div>
+  <div class="card"><b>ROOMS + THEME (loops)</b><div class="grid" id="amb"></div></div>
+  <div class="note">Files: 44.1 kHz stereo OGG Vorbis q6, -16 LUFS / TP &lt; -1.5 dBTP (linear two-pass). Seamlessness verified numerically: wrap delta below the p99 consecutive-sample delta in both channels. Source: gen_ambient.py.</div>
+</div>
+<script>
+const SOUNDS=[
+  ['room_day','Day room - warm air, sparse mallet plinks, distant purr swells (36s)'],
+  ['room_night','Night room - darker air, low bells, soft crickets (36s)'],
+  ['room_rain','Rainy day room - steady rain bed, occasional low mallet (36s)'],
+  ['music_pet_theme','Pet theme - gentle 8-bar music-box lullaby loop (22.9s)'],
+];
+let cur=null,curB=null;
+for(const [name,desc] of SOUNDS){
+  const b=document.createElement('button');b.className='snd';
+  b.innerHTML='<div class="n">'+name.replace(/_/g,' ').toUpperCase()+'</div><div class="d">'+desc+'</div>';
+  b.onclick=()=>{
+    if(curB)curB.classList.remove('playing');
+    if(cur){cur.pause();cur=null;if(curB===b){curB=null;return;}}
+    const a=new Audio('ogg2/'+name+'.ogg');a.loop=true;cur=a;curB=b;
+    b.classList.add('playing');a.play();
+  };
+  document.getElementById('amb').appendChild(b);
+}
+</script>
+</body>
+</html>
